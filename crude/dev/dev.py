@@ -1,15 +1,26 @@
-'''Features under development'''
+'''Features under development
+   BTW A lesson learnt. Do all data processing in SQL'''
 import time
+import rev
+import dbctrl as d
+import os
 
-def handledb(name):
+def normalization():
+	'''Normalization using my database'''
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
-	if name is 'adj':
-		cur = conn.cursor()
-		cur.execute("select * from adj")
-		_dict = {}
-		for e in cur.fetchall():
-			_dict[e[0]] = e[1]
+	c = conn.cursor()
+	files = os.listdir("/home/aditya/Desktop/project/aclImdb/test/pos/")
+	i=0
+	l = d.handledb('adj')
+	for file in files:
+		i+=1
+		if (i%250 ==0): 
+			print str(i)+" files done"
+			conn.commit()
+		persc = rev.basic_scan(open("/home/aditya/Desktop/project/aclImdb/test/pos/"+file).read(), l, False)
+		c.execute("update normalize set num = num + 1, persc = persc + "+str(persc)+" where score = "+((file.split(".")[0]).split("_")[1]))
+	print "done."
 
 def snapshot(name):
 	import MySQLdb as dbc
@@ -30,6 +41,7 @@ def negation(review, adj=None):
 	'''One deviation out'''
 
 '''Tables in mem'''
+#create table mem.normalize(score int, num int, persc float)
 #create table mem.snap_adj(word varchar(20), pull float, times bigint)
 #create table mem.adj(word varchar(20), pull float, times bigint)
 #create table mem.rul_iftt(if varchar(25), then float)
