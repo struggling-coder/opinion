@@ -15,7 +15,7 @@ asecret='wIWzrm3DmRw4yr6hb06KbmactF8HxC7fikpzhew5d9u26'
 
 class listener(StreamListener):
 
-    def on_data(self, qu, data):
+    def on_data(self, data):
         all_data = json.loads(data)        
         tweet = all_data["text"]
         username = all_data["user"]["screen_name"]
@@ -45,4 +45,28 @@ def track(filtername):
 	auth.set_access_token(atoken, asecret)
 
 	twitterStream = Stream(auth, listener())
-	twitterStream.filter(track=["car"])
+	twitterStream.filter(track=[filtername])
+
+def pr(filtername):
+    auth = OAuthHandler(ckey, csecret)
+    auth.set_access_token(atoken, asecret)
+
+    twitterStream = Stream(auth, _listener())
+    twitterStream.filter(track=[filtername])
+
+class _listener(StreamListener):
+
+    def on_data(self, data):
+        all_data = json.loads(data)        
+        tweet = all_data["text"]
+        print str(unicode(tweet).encode("utf-8"))
+        #print all_data
+        #print '-------------------------------------------------------------'
+
+        #c.execute("INSERT INTO taula (time, username, tweet) VALUES (%s,%s,%s)",
+        #            (time.time(), username, tweet))
+        return True
+
+    def on_error(self, status):
+        print status
+     
