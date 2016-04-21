@@ -28,6 +28,9 @@ def snapshot(name):
 	return _name
 	conn.close()
 
+def restore(name):
+	'''Restore from most recent snapshot'''
+
 def handledb_debug(name):
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
