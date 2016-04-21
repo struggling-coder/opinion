@@ -13,6 +13,15 @@ def handledb(name, debug=False):
 		return _dict
 	conn.close()
 
+def snapshot(name):
+	import MySQLdb as dbc
+	_name = name+str(time.time())
+	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
+	c.execute("create table "+_name+ " like "+ name)
+	c.execute("insert into "+_name+ " select * from "+name)
+	return _name
+	conn.close()
+
 def handledb_debug(name):
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
