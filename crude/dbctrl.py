@@ -1,4 +1,5 @@
 '''Python wrapper for database interaction'''
+import time
 
 def handledb(name, debug=False):
 	if debug: handledb_debug(name)
@@ -17,8 +18,13 @@ def snapshot(name):
 	import MySQLdb as dbc
 	_name = name+str(time.time())
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
-	c.execute("create table "+_name+ " like "+ name)
-	c.execute("insert into "+_name+ " select * from "+name)
+	c = conn.cursor()
+
+	c.execute("use mem")
+	c.execute("create table `"+_name+ "` like "+ name)
+	conn.commit()
+	c.execute("insert into `"+_name+ "` select * from "+name)
+	conn.commit()
 	return _name
 	conn.close()
 
