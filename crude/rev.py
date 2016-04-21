@@ -1,6 +1,11 @@
 import text #outdated now
-import dev
 import dbctrl
+
+def better_scan(review, db=None):
+	if db is None:
+		db = dbctrl.handledb('adj')
+	words = text.tokenize(review)
+	
 
 def basic_scan(review, db=None, debug=False):
 	if debug:
@@ -16,6 +21,7 @@ def basic_scan(review, db=None, debug=False):
 		if (c>0 and (word in db.keys())):
 			pull += c * db[word]
 			times += c
+	if times is 0: return 0
 	return pull/times
 
 def basic_scan_debug(review, db=None):
@@ -31,4 +37,5 @@ def basic_scan_debug(review, db=None):
 		if (c>0 and (word in db.keys())):
 			pull += c * db[word]
 			times += c
+	if times is 0: return 0
 	return pull/times
