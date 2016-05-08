@@ -1,8 +1,22 @@
 '''Python wrapper for database interaction'''
 import time
 
+def inetc(database, name, query):
+	'''If Not Exists Then Create'''
+	import MySQLdb as dbc
+	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
+	cur = conn.cursor()
+	cur.execute("show tables")
+	dat = cur.fetchall()
+	for i in dat:
+		if i[0] == name:
+			return None
+	cur.execute(query)
+	conn.commit()
+	conn.close()	
+
 def handledb(name, debug=False):
-	if debug: handledb_debug(name)
+	if debug: return handledb_debug(name)
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
 	if name is 'adj':
