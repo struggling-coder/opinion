@@ -12,11 +12,11 @@ def cmem():
 
 def purge_common_words():
 	'''WARNING: Run this only after an automated construct'''
-	dbctrl.snapshot('mem')
+	dbctrl.snapshot('adj')
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
 	c= conn.cursor()
-	c.execute("delete from mem order by times desc limit 30")
+	c.execute("delete from adj order by times desc limit 30")
 	conn.commit(); conn.close()
 
 def negation():

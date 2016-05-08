@@ -7,19 +7,24 @@ import os
 
 def normalization():
 	'''Normalization using my database'''
+	print "dafuq"
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
 	c = conn.cursor()
+	print "connected"
 	files = os.listdir("/home/aditya/Desktop/project/aclImdb/test/pos/")
 	i=0
 	l = d.handledb('adj')
 	for file in files:
 		i+=1
-		if (i%250 ==0): 
+		if (i%50 ==0): 
 			print str(i)+" files done"
 			conn.commit()
 		persc = rev.basic_scan(open("/home/aditya/Desktop/project/aclImdb/test/pos/"+file).read(), l, False)
 		c.execute("update normalize set num = num + 1, persc = persc + "+str(persc)+" where score = "+((file.split(".")[0]).split("_")[1]))
+		print persc 
+		print ((file.split(".")[0]).split("_")[1])
+		print "----"
 	print "done."
 
 def snapshot(name):
