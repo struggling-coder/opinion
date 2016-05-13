@@ -4,6 +4,7 @@ import dbctrl
 import MySQLdb
 import rev
 import math
+import os
 
 #create table negscan(path, given_score, my_score, deviation)
 
@@ -32,6 +33,7 @@ def negation():
 
 	files = os.listdir("/home/aditya/Desktop/project/aclImdb/test/pos/")
 	i=0
+	l = dbctrl.handledb('adj')
 	for file in files:
 		i+=1
 		if (i%250 ==0): 
@@ -39,9 +41,9 @@ def negation():
 			conn.commit()
 		dude = open("/home/aditya/Desktop/project/aclImdb/test/pos/"+file).read()
 		score = int((file.split(".")[0]).split("_")[1])
-		_score = rev.basic_scan(dude)
-		c.execute("insert into negscan values("+"'/pos/"+file+"', "+score+", "+_score+", "+abs(_score-score)+")")
-		rec += 1; dev2 += (_score-score)^2
+		_score = rev.basic_scan(dude, l)
+		c.execute("insert into negscan values("+"'/pos/"+file+"', "+str(score)+", "+str(_score)+", "+str(abs(_score-score))+")")
+		rec += 1; dev2 += (_score-score)*(_score-score)
 
 	files = os.listdir("/home/aditya/Desktop/project/aclImdb/test/neg/")
 	i=0
@@ -52,9 +54,9 @@ def negation():
 			conn.commit()
 		dude = open("/home/aditya/Desktop/project/aclImdb/test/neg/"+file).read()
 		score = int((file.split(".")[0]).split("_")[1])
-		_score = rev.basic_scan(dude)
-		c.execute("insert into negscan values("+"'/neg/"+file+"', "+score+", "+_score+", "+abs(_score-score)+")")
-		rec += 1; dev2 += (_score-score)^2
+		_score = rev.basic_scan(dude, l)
+		c.execute("insert into negscan values("+"'/neg/"+file+"', "+(score)+", "+(_score)+", "+(abs(_score-score))+")")
+		rec += 1; dev2 += (_score-score)*(_score-score)
 
 	stddev = math.sqrt(dev2/rec)
 	flagged = []

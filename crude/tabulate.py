@@ -25,16 +25,16 @@ def wrapper():
 	#CREATE TABLE words(word, freq bigint, score bigint, av)
 	db = MySQLdb.connect(user='root', passwd='aditya', db='mem')
 	print "connection opened to mem"
-	files = os.listdir("/home/aditya/Desktop/project/aclImdb/test/pos/")
+	files = os.listdir("/home/aditya/Desktop/project/aclImdb/train/neg/")
 	i=0
 	for file in files:
 		i+=1
 		if (i%250 ==0): 
 			print str(i)+" files done"
 			db.commit()
-		tabulate(open("/home/aditya/Desktop/project/aclImdb/test/pos/"+file).read(), int((file.split(".")[0]).split("_")[1]), db)
+		tabulate(open("/home/aditya/Desktop/project/aclImdb/train/neg/"+file).read(), int((file.split(".")[0]).split("_")[1]), db)
 	cur = db.cursor()
-	print len(files)+" files processed."
+	print str(len(files))+" files processed."
 	cur.execute("update words set av = score/freq")
 	db.close()
 	print "averages updated"
