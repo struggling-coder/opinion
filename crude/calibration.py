@@ -8,8 +8,14 @@ import os
 
 #create table negscan(path, given_score, my_score, deviation)
 
-def cmem():
-	'''Compete in between the list of supplied tables for the best one. Add weightwise'''
+def cmem(old, new, data, expec):
+	'''Compete in between the list of supplied tables for the best one. Add weightwise
+	expec[i] is the expected value of data[i]
+	Think about the fitting'''
+
+	dbctrl.snapshot('adj')
+
+
 
 def purge_common_words():
 	'''WARNING: Run this only after an automated construct'''
