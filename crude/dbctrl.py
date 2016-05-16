@@ -4,7 +4,7 @@ import time
 def inetc(database, name, query):
 	'''If Not Exists Then Create'''
 	import MySQLdb as dbc
-	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
+	conn = dbc.connect(user='root', passwd='aditya', db=database)	
 	cur = conn.cursor()
 	cur.execute("show tables")
 	dat = cur.fetchall()
@@ -28,10 +28,10 @@ def handledb(name, debug=False):
 		return _dict
 	conn.close()
 
-def snapshot(name):
+def snapshot(name, database='mem'):
 	import MySQLdb as dbc
 	_name = name+str(time.time())
-	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
+	conn = dbc.connect(user='root', passwd='aditya', db=database)	
 	c = conn.cursor()
 
 	c.execute("use mem")
@@ -44,6 +44,16 @@ def snapshot(name):
 
 def restore(name):
 	'''Restore from most recent snapshot'''
+	import MySQLdb as dbc
+	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
+	c = conn.cursor()
+	c.execute("show tables like '"+name+"%'")
+	w = c.fetchall()
+	backup = w[len(w) - 1][0]
+	c.execute("delete from `"+name+"`")
+	c.execute("insert into "+name+" select * from `"+backup+"`")
+	conn.commit()
+	conn.close()
 
 def handledb_debug(name):
 	import MySQLdb as dbc
