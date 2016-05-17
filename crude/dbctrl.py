@@ -1,6 +1,16 @@
 '''Python wrapper for database interaction'''
 import time
 
+def pickle_adj(pickle):
+	import MySQLdb as dbc
+	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
+	cur = conn.cursor()
+	cur.execute("delete from adj")
+	for e in pickle:
+		cur.execute("insert into adj values('"+e+"',"+pickle[e]+" )")
+	conn.commit()
+	conn.close()
+
 def inetc(database, name, query):
 	'''If Not Exists Then Create'''
 	import MySQLdb as dbc
