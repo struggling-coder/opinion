@@ -6,7 +6,6 @@ def better_scan(review, db=None):
 		db = dbctrl.handledb('adj')
 	words = text.tokenize(review)
 	
-
 def basic_scan(review, db=None, debug=False):
 	if debug:
 		basic_scan_debug(review, db)

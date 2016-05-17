@@ -42,6 +42,7 @@ common = [
 helping_verbs = ['am', 'are', 'is', 'was', 'were', 'being', 'been', 'have', 'has', 'had',
 				 'shall', 'will', 'do', 'does', 'did', 'may', 'might', 'can', 'could', 'would', 'should']
 
+#this can be pruned
 def tokenize(text):
 	'''Return tokens from formatted text'''
 	text=text.strip().lower()

@@ -15,7 +15,6 @@ def cmem(old, new, data, expec):
 
 	old_error = 0
 	new_error = 0
-	dbctrl.snapshot('adj')
 	i = 0
 	for e in data:
 		old_error += (math.abs(expec[i] - rev.basic_scan(e, old)))
@@ -27,7 +26,8 @@ def cmem(old, new, data, expec):
 
 	if (_old > _new):
 		#out with the old and in with the new. Think about it
-		dbctrl.pickle_adj(new)
+		return 0
+	return 1
 
 def purge_common_words():
 	'''WARNING: Run this only after an automated construct'''

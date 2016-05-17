@@ -1,13 +1,15 @@
 '''Python wrapper for database interaction'''
 import time
 
-def pickle_adj(pickle):
+#a fine pickle you've got me into
+def pickle_adj(pickle, dbrec):
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
 	cur = conn.cursor()
-	cur.execute("delete from adj")
-	for e in pickle:
-		cur.execute("insert into adj values('"+e+"',"+pickle[e]+" )")
+	#cur.execute("delete from adj")
+	if dbrec:
+		
+
 	conn.commit()
 	conn.close()
 
