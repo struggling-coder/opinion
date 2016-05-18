@@ -6,10 +6,7 @@ def pickle_adj(pickle, dbrec):
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	
 	cur = conn.cursor()
-	#cur.execute("delete from adj")
-	if dbrec:
-		
-
+	cur.execute("delete from adj")	
 	conn.commit()
 	conn.close()
 
