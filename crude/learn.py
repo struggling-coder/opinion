@@ -32,11 +32,13 @@ def do(data, expec):
 		buildup=[]
 		for s in text.split_sentences(e):
 			words=text.tokenize(s)
+			builder=[]
 			if len(set(words).intersection(set(negatives))) > 0:
 				for d in words:
-					words.remove(d)
-					words.append("!"+d)
-			buildup.extend(words)
+					builder.append("!"+d)
+			else:
+				builder.extend(words)
+			buildup.extend(builder)
 		for w in (buildup):
 			try:
 				_dict[w][expec[i]] +=1
@@ -48,8 +50,14 @@ def do(data, expec):
 
 	print 'commence pruning'
 	q=0
+	av=0
 	for w in _dict.keys():
-		if sum(_dict[w]) < 10:
+		av += sum(_dict[w])
+	av = av / len(_dict)
+	av *= 0.9 
+	print str(av) + " is the threshold"
+	for w in _dict.keys():
+		if sum(_dict[w]) < av:
 			_dict.pop(w)
 			q+=1
 	print str(q) + ' records removed'
@@ -67,7 +75,7 @@ def do(data, expec):
 			except: weights[j] = 0
 		for j in range(1,11):
 			score += weights[j] * j
-		_return[w] = score
+		_return[w] = [score,sum(_dict[w])]
 	print 'data processed'
 
 	print 'task complete'
@@ -81,14 +89,14 @@ def implementation1():
 	b=0
 	files = os.listdir("/home/aditya/Desktop/project/aclImdb/train/neg/")
 	for file in files[:]:
-		if (b%250==0): print str(b)+ " negative files done"
+		if (b%2500==0): print str(b)+ " negative files done"
 		data.append(open("/home/aditya/Desktop/project/aclImdb/train/neg/"+file).read())
 		expec.append(int((file.split(".")[0]).split("_")[1]))
 		b+=1
 	files = os.listdir("/home/aditya/Desktop/project/aclImdb/train/pos/")
 	b=0
 	for file in files[:]:
-		if (b%250==0): print str(b)+ " positive files done"
+		if (b%2500==0): print str(b)+ " positive files done"
 		data.append(open("/home/aditya/Desktop/project/aclImdb/train/pos/"+file).read())
 		expec.append(int((file.split(".")[0]).split("_")[1]))
 		b+=1
@@ -102,7 +110,7 @@ def implementation1():
 	
 	j=0
 	for e in r:
-		cur.execute("insert into memtest values('"+e+"', "+str(r[e])+")")
+		cur.execute("insert into memtest values('"+e+"', "+str(r[e][0])+")")
 		if (j%2000 == 0):
 			dbw.commit()
 			print str(j) + " words committed"

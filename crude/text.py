@@ -42,10 +42,10 @@ common = [
 helping_verbs = ['am', 'are', 'is', 'was', 'were', 'being', 'been', 'have', 'has', 'had',
 				 'shall', 'will', 'do', 'does', 'did', 'may', 'might', 'can', 'could', 'would', 'should']
 
-negatives = ['not', 'but','only','almost','no']
+negatives = ['not', 'but','no']
 
 def dev_tokenize(text):
-
+	print 'hello'
 
 #this can be pruned
 def tokenize(text):
