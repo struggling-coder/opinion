@@ -1,6 +1,9 @@
 import text #outdated now
 import dbctrl
 
+def scan(review, db=None):
+	
+
 def better_scan(review, db=None):
 	if db is None:
 		db = dbctrl.handledb('adj')

@@ -19,7 +19,7 @@ def cmem(old, new, data, expec):
 	for e in data:
 		old_error += (math.abs(expec[i] - rev.basic_scan(e, old)))
 		new_error += (math.abs(expec[i] - rev.basic_scan(e, new)))
-		i++
+		i+=1
 	g = len(data)
 	_old = old_error/g
 	_new = new_error/g
@@ -38,7 +38,7 @@ def purge_common_words():
 	c.execute("delete from adj order by times desc limit 30")
 	conn.commit(); conn.close()
 
-def negation():
+def pipe_negation():
 	'''Current strategy is to operate on the set of reviews, and find out which don't match worst'''
 	import MySQLdb as dbc
 	conn = dbc.connect(user='root', passwd='aditya', db='mem')	

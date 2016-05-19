@@ -42,6 +42,11 @@ common = [
 helping_verbs = ['am', 'are', 'is', 'was', 'were', 'being', 'been', 'have', 'has', 'had',
 				 'shall', 'will', 'do', 'does', 'did', 'may', 'might', 'can', 'could', 'would', 'should']
 
+negatives = ['not', 'but','only','almost','no']
+
+def dev_tokenize(text):
+
+
 #this can be pruned
 def tokenize(text):
 	'''Return tokens from formatted text'''

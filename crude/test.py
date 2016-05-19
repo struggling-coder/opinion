@@ -1,5 +1,8 @@
 import learn, os
 
+def find_good_in_bad():
+	#a simple grep should do it.
+
 def learn_v1():
 	'''Select 50 positive and 50 negative reviews from train. Make 2 lists and supply them. Capture output and then code same 
 	structure into MySQL. Backup first'''

@@ -4,6 +4,9 @@ First stop: Mr. Bayes, the Naive'''
 import dbctrl
 import text
 import os
+import calibration
+import normal
+from text import negatives
 
 #create table adj(word varchar(20), pull float)
 
@@ -23,10 +26,18 @@ def do(data, expec):
 		p_rev_eq_k[i] = numbers[i]/num
 	print "data initialized"
 
-	#while learning it doesn't really mmatter how many times this appears
+	#while learning it doesn't really matter how many times this appears. OR DOES IT?
 	i=0
 	for e in data:
-		for w in set(text.tokenize(e)):
+		buildup=[]
+		for s in text.split_sentences(e):
+			words=text.tokenize(s)
+			if len(set(words).intersection(set(negatives))) > 0:
+				for d in words:
+					words.remove(d)
+					words.append("!"+d)
+			buildup.extend(words)
+		for w in (buildup):
 			try:
 				_dict[w][expec[i]] +=1
 			except KeyError:
@@ -34,8 +45,15 @@ def do(data, expec):
 				_dict[w][expec[i]] +=1
 		i+=1
 	print "data loaded. " + str(len(_dict)) + " words present"
-	print _dict['good']
 
+	print 'commence pruning'
+	q=0
+	for w in _dict.keys():
+		if sum(_dict[w]) < 10:
+			_dict.pop(w)
+			q+=1
+	print str(q) + ' records removed'
+	
 	i=0
 	for w in _dict.keys():
 		score = 0
@@ -53,6 +71,7 @@ def do(data, expec):
 	print 'data processed'
 
 	print 'task complete'
+
 	return _return
 
 def implementation1():
@@ -61,14 +80,14 @@ def implementation1():
 
 	b=0
 	files = os.listdir("/home/aditya/Desktop/project/aclImdb/train/neg/")
-	for file in files:
+	for file in files[:]:
 		if (b%250==0): print str(b)+ " negative files done"
 		data.append(open("/home/aditya/Desktop/project/aclImdb/train/neg/"+file).read())
 		expec.append(int((file.split(".")[0]).split("_")[1]))
 		b+=1
 	files = os.listdir("/home/aditya/Desktop/project/aclImdb/train/pos/")
 	b=0
-	for file in files:
+	for file in files[:]:
 		if (b%250==0): print str(b)+ " positive files done"
 		data.append(open("/home/aditya/Desktop/project/aclImdb/train/pos/"+file).read())
 		expec.append(int((file.split(".")[0]).split("_")[1]))
@@ -84,7 +103,7 @@ def implementation1():
 	j=0
 	for e in r:
 		cur.execute("insert into memtest values('"+e+"', "+str(r[e])+")")
-		if (j%250 == 0):
+		if (j%2000 == 0):
 			dbw.commit()
 			print str(j) + " words committed"
 		j+=1
