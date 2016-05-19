@@ -107,10 +107,11 @@ def implementation1():
 	dbw = MySQLdb.connect(user='root', passwd='aditya', db='mem')
 	print "connection opened to mem"
 	cur = dbw.cursor()
-	
+	dbctrl.snapshot('adj')
+
 	j=0
 	for e in r:
-		cur.execute("insert into memtest values('"+e+"', "+str(r[e][0])+")")
+		cur.execute("insert into adj values('"+e+"', "+str(r[e][0])+", "+str(r[e][1])+")")
 		if (j%2000 == 0):
 			dbw.commit()
 			print str(j) + " words committed"
