@@ -13,14 +13,22 @@ def _re_analysis():
 def analyze(review, db=None, regexp=None, debug=False):
 	if regexp is None: regexp = _re_analysis()
 	if db is None: db = memory.recollect()
-	data = text.tokenize(review)
-	adjectives = filter(db.__contains__, data)
-	if adjectives:
-		val = 0; size = 0
-		if re.search(regexp["negation"], review):
-			for e in re.findall(regexp["plckng"], review)
-				if 
-		comp = [db[e] for e in re.findall(regexp["emoticons"], review)]
-		comp.extend([db[e] for e in adjectives])
+	trules = text._retext()
+	elements=[]
+	emoticons = list(re.finditer(_dict["emoticons"], review))
+	if emoticons: elements.extend([e.group() for e in emoticons])
+	if re.search(_dict["negation"], review):
+		recontruct = ''; last=0
+		for e in re.finditer(_dict["plckng"], review): 
+			elements.extend(['!'+w for w in text.tokenize(e.group(), trules)])
+			recontruct += review[last:e.start()]
+			last = e.end()
+		review = recontruct + review[last:]
+	elements.extend(text.tokenize(review, trules))
+	elements = filter(db.__contains__, elements)
+	if elements:
+		val = 0; size = 0		
+		comp.extend([db[e] for e in elements])
 		val += sum(comp); size += len(comp)
 		return val / size
+	return 0
