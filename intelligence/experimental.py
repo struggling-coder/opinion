@@ -1,0 +1,2 @@
+#competetive memory
+#enthusiasm multiplier

@@ -1,34 +1,41 @@
-import text, memory, re
+import text, memory, re, debug
 #search for emoticons: [:;=<()] (not worth it?)
 
-def understand():
-	'''
-	1) Get the average filtered
-	2)
-	'''
+def post():
+	db = memory.recollect()
 
-def learn_v0(data, scores, rules=None, verbose=False):
+def learn(data, scores, rules=None, verbose=False, bar=None):
 	trules = text._retext(); j=0
 	if rules is None: rules = learning()
 	table1 = memory.control(0)
+	table2 = memory.control(0)
+	print "learn: temp = "+table1
+	print "learn: temp = "+table2
 	conn = memory.gc_(); cur = conn.cursor()
+	print "learn: memory ready"
+	if bar is not None: data = bar(data)
 	for record in data:
 		elements = basic(record, rules, trules, False)
-		for e in elements: cur.execute("insert into "+table1+" values("+e+", "+str(score[j])+")")
+		for e in elements: cur.execute("insert into "+table1+" values(\""+e+"\", "+str(scores[j])+", 1)")
 		j += 1
-	table2 = memory.control(0)
 	cur.execute("insert into "+table2+" select element, sum(score)/sum(times), sum(times) from "+table1+" group by element")
-	memory.integrate(table2)
+	print "learn: integrating tables"
+	memory.integrate(table2, cur)
+	print "learn: deleting temporary tables"
+	memory.forget(table1)
+	conn.commit(); conn.close()
+	print "learn: committed to memory"
 
 def basic(review, rules=None, trules=None, verbose=False):
 	if rules is None: rules = learning()
 	if trules is None: text._retext()
+	if verbose: debug.basic(review, rules, trules)
 	elements=[]; 
-	emoticons = list(re.finditer(rules[1], review))
-	if emoticons: elements.extend([e.group() for e in emoticons])
+	#emoticons = list(re.finditer(rules[1], review))
+	#if emoticons: elements.extend([e.group() for e in emoticons])
 	if re.search(rules[0], review):
 		recontruct = ''; last=0
-		for e in re.finditer(rules[2], review): 
+		for e in re.finditer(rules[2], review):
 			elements.extend(['!'+w for w in text.tokenize(e.group(), trules)])
 			recontruct += review[last:e.start()]
 			last = e.end()

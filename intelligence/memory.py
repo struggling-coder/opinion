@@ -2,29 +2,46 @@
 import MySQLdb, random
 db='memory0'
 
-#def origin():
+def rollback():
+	print "CODE THIS!"
 
-def integrate(table):
-	backup()
+def origin():
 	conn = gc_(); cur = conn.cursor()
-	cur.execute("delete from mem")
-	cur.execute("insert into mem select * from "+table)
-	forget(table)
+	cur.execute("create table mem(element varchar(15), score float)")
+	cur.execute("create table dump(element varchar(15), score float, times long)")
 	conn.close()
 
+def integrate(table, cur):
+	backup()
+	cur.execute("drop table mem")
+	print "memory: mem forgotten"
+	cur.execute("flush tables")
+	cur.execute("truncate dump")
+	cur.execute("insert into dump select * from "+table)
+	print "memory: tables flushed"
+	cur.execute("rename table "+table+" to mem")
+	cur.execute("alter table mem drop column times")
+	print "memory: new memory made"
+	
 def control(_int):
-	conn = gc_(); cur = conn.cursor()
+	conn = gc_(); cur = conn.cursor(); name=''
 	if _int is 0: #create table _tempXXXX(element varchar(15), score float, times int)
 		name = '_temp'+str(random.randint(1000, 9999))
-		cur.execute("create table "+name+"(element varchar(15), score float, times int)")
+		cur.execute("create table "+name+"(element varchar(15), score float, times long)")
 	if _int is 1:
 		name = '_mem'+str(random.randint(1000, 9999))
 		cur.execute("create table "+name+" like mem")
+	if int is 2: cur.execute("create table dump(element varchar(15), score float, times long)")
 	conn.close()
 	return name
 
+def c_(command):
+	conn = gc_(); cur = conn.cursor()
+	cur.execute(command)
+	conn.close()
+
 def gc_():		
-	return dbc.connect(user='root', passwd='aditya', db=db)	
+	return MySQLdb.connect(user='root', passwd='aditya', db=db)	
 
 def recollect():
 	conn = gc_(); cur = conn.cursor()
@@ -36,10 +53,10 @@ def backup():
 	cur.execute("insert into "+control(1)+" select * from mem")
 
 def forget(name):
-	gc_().cursor().execute("drop table "+name)
+	c_("drop table "+name)
 
 def death():
-	gc_().cursor().execute("drop database "+db)
+	c_("drop database "+db)
 """
 Master tables:
 1) mem(element varchar(15), score float)
