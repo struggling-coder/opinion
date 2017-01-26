@@ -1,10 +1,26 @@
 import text, memory, re, debug
 #search for emoticons: [:;=<()] (not worth it?)
 
-def post():
-	db = memory.recollect()
+def learn(data, scores, )
 
-def learn(data, scores, rules=None, verbose=False, bar=None):
+def learn_deprec(data, scores, rules=None, verbose=False, bar=None):
+	if verbose: return learnd(data, scores, bar=bar)
+	trules = text._retext(); j=0
+	if rules is None: rules = learning()
+	table1 = memory.control(0)
+	table2 = memory.control(0)
+	conn = memory.gc_(); cur = conn.cursor()
+	if bar is not None: data = bar(data)
+	for record in data:
+		elements = basic(record, rules, trules, False)
+		for e in elements: cur.execute("insert into "+table1+" values(\""+e+"\", "+str(scores[j])+", 1)")
+		j += 1
+	cur.execute("insert into "+table2+" select element, sum(score)/sum(times), sum(times) from "+table1+" group by element")
+	memory.integrate(table2, cur)
+	memory.forget(table1)
+	conn.commit(); conn.close()
+
+def learnd_deprec(data, scores, rules=None, bar=None):
 	trules = text._retext(); j=0
 	if rules is None: rules = learning()
 	table1 = memory.control(0)

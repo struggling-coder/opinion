@@ -1,6 +1,6 @@
 #Stupidest part of the whole thing
 import MySQLdb, random
-db='memory0'
+db='memory2'
 
 def rollback():
 	print "CODE THIS!"
@@ -8,7 +8,8 @@ def rollback():
 def origin():
 	conn = gc_(); cur = conn.cursor()
 	cur.execute("create table mem(element varchar(15), score float)")
-	cur.execute("create table dump(element varchar(15), score float, times long)")
+	cur.execute("create table dump(element varchar(15), score float, times int)")
+	cur.execute("create table _dump(element varchar(15), score float, times int)")
 	conn.close()
 
 def integrate(table, cur):
@@ -27,11 +28,11 @@ def control(_int):
 	conn = gc_(); cur = conn.cursor(); name=''
 	if _int is 0: #create table _tempXXXX(element varchar(15), score float, times int)
 		name = '_temp'+str(random.randint(1000, 9999))
-		cur.execute("create table "+name+"(element varchar(15), score float, times long)")
+		cur.execute("create table "+name+"(element varchar(15), score float, times int)")
 	if _int is 1:
 		name = '_mem'+str(random.randint(1000, 9999))
 		cur.execute("create table "+name+" like mem")
-	if int is 2: cur.execute("create table dump(element varchar(15), score float, times long)")
+	if int is 2: cur.execute("create table dump(element varchar(15), score float, times int)")
 	conn.close()
 	return name
 
