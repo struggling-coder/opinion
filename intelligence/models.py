@@ -1,4 +1,4 @@
-import progressbar, learn, tools, memory
+import progressbar, learn, tools, memory, analysis
 
 def _exec():
 	sequence()
@@ -7,6 +7,20 @@ def _exec():
 def sequence():
 	reload(learn)
 	reload(memory)
+
+def readm0():
+	bar = progressbar.ProgressBar()
+	data = tools.loaddir("/home/aditya/Desktop/project/aclImdb/train/pos/")
+	data.extend(tools.loaddir("/home/aditya/Desktop/project/aclImdb/train/neg/"))
+	regexp = analysis._re_analysis()
+	db = memory.recollect()
+	return [analysis.analyze(open(w[0]).read(), db=db, regexp=regexp) for w in bar(data)]
+
+def test0(number):
+	data = tools.loaddir("/home/aditya/Desktop/project/aclImdb/train/pos/")
+	data.extend(tools.loaddir("/home/aditya/Desktop/project/aclImdb/train/neg/"))
+	print "analyze: "+str(analysis.analyze(open(data[number][0]).read(), debug=True))
+	print "analyze: "+data[number][1]
 
 def model0():
 	'''
@@ -42,12 +56,14 @@ def model0():
 	print "model: average filtering done"
 	cur.execute(r"delete from dump where element like '%\'%\'%'")
 	cur.execute(r"delete from dump where element like '%\'%' and element  not like '%n\'t%';")
-	print "filtering complete. closing connection"
+	print "model: filtering complete"
+	cur.execute("select @rnf:=10/(max(score)-min(score)) from dump")
+	cur.execute("update dump set score = score * @rnf")
+	print "model: renormalization done. closing connection"
 	connection.commit()
 	connection.close()
 
 #def test(testdir):
-
 
 #def failure():
 

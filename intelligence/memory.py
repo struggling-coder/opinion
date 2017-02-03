@@ -1,6 +1,6 @@
 #Stupidest part of the whole thing
 import MySQLdb, random
-db='memory2'
+db= 'memory2'#raw_input("database: ")#'memory2'
 
 def rollback():
 	print "CODE THIS!"

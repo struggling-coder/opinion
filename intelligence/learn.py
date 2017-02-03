@@ -1,9 +1,7 @@
 import text, memory, re, debug
 #search for emoticons: [:;=<()] (not worth it?)
 
-def learn(data, scores, )
-
-def learn_deprec(data, scores, rules=None, verbose=False, bar=None):
+def learn(data, scores, rules=None, verbose=False, bar=None):
 	if verbose: return learnd(data, scores, bar=bar)
 	trules = text._retext(); j=0
 	if rules is None: rules = learning()
@@ -20,7 +18,7 @@ def learn_deprec(data, scores, rules=None, verbose=False, bar=None):
 	memory.forget(table1)
 	conn.commit(); conn.close()
 
-def learnd_deprec(data, scores, rules=None, bar=None):
+def learnd(data, scores, rules=None, bar=None):
 	trules = text._retext(); j=0
 	if rules is None: rules = learning()
 	table1 = memory.control(0)

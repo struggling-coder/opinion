@@ -59,6 +59,8 @@ def analyzed(review, db, regexp):
 		return val / size
 	return 0
 
+#[0, 5100, 2284, 2420, 2696, 0, 0, 2496, 3009, 2263, 4732]
+
 def _word(word):
 
 	bar = progressbar.ProgressBar()
@@ -67,6 +69,5 @@ def _word(word):
 	print "analysis: "+"reading data and scores"
 	scores=[0,0,0,0,0,0,0,0,0,0,0]
 	for w in bar(data):
-		list(re.finditer(word, open(w[0]).read(), re.IGNORECASE))
-		scores[int(w[1])] += 1
+		scores[int(w[1])] += len(list(re.finditer(r'\b'+word+r'\b', open(w[0]).read(), re.IGNORECASE)))
 	return scores
